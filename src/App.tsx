@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import  Home  from "./pages/Home";
+import  Login  from "./pages/Login";
+import  Registration from "./pages/Registration";
+import { db } from "./services/firebase/config";
+import { observer } from "mobx-react";
+import { useEffect } from "react";
+import { getAuth } from "firebase/auth";
+import userStore from "./store/UserStore";
 
 function App() {
+    console.log(db)
+    useEffect(()=>{
+        const unSubscribe = getAuth().onAuthStateChanged((user)=>{
+            userStore.setUser(user)
+        })
+        return()=>{unSubscribe()}
+    },[])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/">
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="reg" element={<Registration />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-export default App;
+export default observer(App);
