@@ -24,7 +24,7 @@ function Login() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Button p="4" m="2" bg="green.400" onClick={onOpen}>
+      <Button p="4" m="2" colorScheme='green' onClick={onOpen}>
         Login
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>

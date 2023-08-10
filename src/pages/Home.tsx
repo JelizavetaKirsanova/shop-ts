@@ -25,7 +25,7 @@ function Home() {
       <Flex>
         <Spacer />
         {userStore.user ? (
-          <Button onClick={()=>{getAuth().signOut()}}  p="4" m="2" bg="red.400" color="white">Logout</Button>
+          <Button onClick={()=>{getAuth().signOut()}}  p="4" m="2" colorScheme='red' color="white">Logout</Button>
         ) : (
           <>
             <Login />
@@ -44,7 +44,7 @@ function Home() {
       <Divider />
       <Center h="100px" color="black">
         <Input placeholder="Search..." width="350px" />
-        <Button p="4" m="2" bg="green.400">
+        <Button p="4" m="2" colorScheme="green">
           Find
         </Button>
       </Center>
