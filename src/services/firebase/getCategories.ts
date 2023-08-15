@@ -1,11 +1,11 @@
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "./config";
-import getAddsByCategory from "./getAddsByCategory";
+import categoryType from "../../types/categoryType";
 
 async function getCategories() {
   const q = query(collection(db, "Categories"));
   const snapshot = await getDocs(q);
-  const data: any[] = [];
+  const data: categoryType[] = [];
   snapshot.forEach((el) => {
     data.push({
       id: el.id,

@@ -1,8 +1,8 @@
 import { HStack, Heading, VStack } from "@chakra-ui/react";
-import AddComponent from "./Add";
+import AddComponent from "./Ad";
 
 function CategoryComponent() {
-    
+
   return (
     <VStack w="100%">
       <Heading as="h2">Category</Heading>

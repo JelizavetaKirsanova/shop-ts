@@ -20,9 +20,10 @@ import userStore from "../store/UserStore";
 import { getAuth } from "firebase/auth";
 import CategoryComponent from "../components/CategoryComponent";
 import getCategories from "../services/firebase/getCategories";
-import getAddsByCategory from "../services/firebase/getAddsByCategory";
+import getAddsByCategory from "../services/firebase/getAdsByCategory";
 
 function Home() {
+  console.log(getAddsByCategory("cvfw1gSQdddADEBVHpa0"))
   return (
     <ChakraProvider>
       <Center>

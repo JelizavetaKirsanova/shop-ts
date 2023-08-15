@@ -1,3 +1,3 @@
-type authCredentialsType = { email: string; password: string; data: Array<object>; category: object, categoryId: string};
+type authCredentialsType = { email: string; password: string;}
 
 export default authCredentialsType
