@@ -21,9 +21,18 @@ import { getAuth } from "firebase/auth";
 import CategoryComponent from "../components/CategoryComponent";
 import getCategories from "../services/firebase/getCategories";
 import getAddsByCategory from "../services/firebase/getAdsByCategory";
+import categoryType from "../types/categoryType";
+import { useEffect } from "react";
 
 function Home() {
-  console.log(getAddsByCategory("cvfw1gSQdddADEBVHpa0"))
+  const [categories, setCategories] = React.useState<categoryType[] | null>(
+    null
+  );
+  useEffect(() => {
+    (async () => {
+      setCategories(await getCategories());
+    })();
+  }, []);
   return (
     <ChakraProvider>
       <Center>
@@ -66,7 +75,7 @@ function Home() {
                 Find
               </Button>
             </Center>
-            <CategoryComponent />
+            {categories? categories.map((cat)=>(<CategoryComponent category={cat}/>)): <></>}
           </VStack>
         </VStack>
       </Center>

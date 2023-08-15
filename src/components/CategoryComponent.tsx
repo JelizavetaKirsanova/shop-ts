@@ -1,13 +1,22 @@
 import { HStack, Heading, VStack } from "@chakra-ui/react";
-import AddComponent from "./Ad";
+import AdComponent from "./Ad";
+import { useEffect, useState } from "react";
+import adType from "../types/adType";
+import getAdsByCategory from "../services/firebase/getAdsByCategory";
+import categoryType from "../types/categoryType";
 
-function CategoryComponent() {
+function CategoryComponent({category}: {category :categoryType}) {
+    const [ads, setAds] = useState<adType[]| null>(null)
+    useEffect(()=>{
+        (async()=>{setAds(await getAdsByCategory(category.id))})()
+    }, [])  
 
   return (
     <VStack w="100%">
-      <Heading as="h2">Category</Heading>
+      <Heading as="h2">{category.title}</Heading>
       <HStack spacing={5}>
-        <AddComponent />
+        {ads? ads.map((ad)=>(<AdComponent ad={ad} />)):<></>}
+        
       </HStack>
     </VStack>
   );
