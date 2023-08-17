@@ -23,6 +23,7 @@ import getCategories from "../services/firebase/getCategories";
 import getAddsByCategory from "../services/firebase/getAdsByCategory";
 import categoryType from "../types/categoryType";
 import { useEffect } from "react";
+import UploadAd from "./UploadAd";
 
 function Home() {
   const [categories, setCategories] = React.useState<categoryType[] | null>(
@@ -40,17 +41,20 @@ function Home() {
           <Flex w="100%" justifyContent="flex-end">
             <Spacer />
             {userStore.user ? (
-              <Button
-                onClick={() => {
-                  getAuth().signOut();
-                }}
-                p="4"
-                m="2"
-                colorScheme="red"
-                color="white"
-              >
-                Logout
-              </Button>
+              <>
+                <UploadAd />
+                <Button
+                  onClick={() => {
+                    getAuth().signOut();
+                  }}
+                  p="4"
+                  m="2"
+                  colorScheme="red"
+                  color="white"
+                >
+                  Logout
+                </Button>
+              </>
             ) : (
               <>
                 <Login />
@@ -75,7 +79,11 @@ function Home() {
                 Find
               </Button>
             </Center>
-            {categories? categories.map((cat)=>(<CategoryComponent category={cat}/>)): <></>}
+            {categories ? (
+              categories.map((cat) => <CategoryComponent category={cat} />)
+            ) : (
+              <></>
+            )}
           </VStack>
         </VStack>
       </Center>

@@ -14,15 +14,15 @@ import adType from "../types/adType";
 
 function AdComponent({ad} : {ad: adType}) {
   return (
-    <Card maxW="sm">
+    <Card w="sm">
       <CardBody>
-        <Image src={ad.image} alt={ad.title} borderRadius="lg" />
+        <Image src={ad.image} alt={ad.title} borderRadius="md" />
         <Stack mt="6" spacing="3">
           <Heading size="md" as="h3">
             {ad.title}
           </Heading>
-          <Text>{ad.description}</Text>
-          <Text color="blue.600" fontSize="2xl">
+          <Text isTruncated>{ad.description}</Text>
+          <Text color="blue.600" fontSize="xl">
             {ad.price}$
           </Text>
         </Stack>

@@ -24,7 +24,7 @@ function Login() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Button p="4" m="2" colorScheme='green' onClick={onOpen}>
+      <Button p="4" m="2" colorScheme="green" onClick={onOpen}>
         Login
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -40,7 +40,7 @@ function Login() {
               initialValues={{ email: "", password: "" }}
               onSubmit={async (values) => {
                 const user = await signIn(values as authCredentialsType);
-                onClose()
+                onClose();
                 console.log(user);
               }}
             >
@@ -50,12 +50,14 @@ function Login() {
                     m={2}
                     type="email"
                     name="email"
+                    placeholder="Email..."
                     onChange={handleChange}
                     value={values.email}
                   />
                   <Input
                     m={2}
                     type="password"
+                    placeholder="Password..."
                     name="password"
                     onChange={handleChange}
                     value={values.password}

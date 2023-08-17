@@ -68,6 +68,7 @@ function Registration() {
                     m={2}
                     type="email"
                     name="email"
+                    placeholder="Email..."
                     onChange={handleChange}
                     value={values.email}
                   />
@@ -76,6 +77,7 @@ function Registration() {
                   <Input
                     m={2}
                     type="password"
+                    placeholder="Password..."
                     name="password"
                     onChange={handleChange}
                     value={values.password}
