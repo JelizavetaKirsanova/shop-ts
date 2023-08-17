@@ -52,12 +52,12 @@ function UploadAd() {
                 description: "",
                 image: "",
                 price: "",
-                category: "cvfw1gSQdddADEBVHpa0",
+                category: "",
               }}
               onSubmit={async (values) => {
-                const ad = await newAd(values as adType);
+                // const ad = await newAd(values as adType);
                 onClose();
-                console.log(ad);
+                 console.log(values);
               }}
             >
               {({ values, handleChange, handleSubmit, isSubmitting }) => (
@@ -90,7 +90,7 @@ function UploadAd() {
                     onChange={handleChange}
                     value={values.price}
                   />
-                  <Select m={2} placeholder= "Select category">
+                  <Select m={2} placeholder= "Select category" onChange={handleChange}>
                     {categories ? categories.map((cat) => <option value={cat.id}>{cat.title}</option>) : <></>}
                   </Select>
 
