@@ -15,6 +15,7 @@ import {
   Heading,
   Image,
   Text,
+  Spinner,
 } from "@chakra-ui/react";
 import * as React from "react";
 import Login from "./Login";
@@ -32,6 +33,8 @@ import UserComponent from "../components/UserComponent";
 import getAdByTitle from "../services/firebase/getAdByTitle";
 import Search from "../components/Search";
 import UploadCategory from "./UploadCategory";
+import searchStore from "../store/SearchStore";
+import AdComponent from "../components/Ad";
 
 function Home() {
   const [categories, setCategories] = React.useState<categoryType[] | null>(
@@ -61,6 +64,8 @@ function Home() {
                 <UserComponent
                   image={userStore.userData?.image}
                   name={userStore.userData?.name}
+                  boxSize="60px"
+                  fontSize="3xl"
                 />
               </Center>
               <Flex justifyContent="flex-end" m={2}>
@@ -106,13 +111,35 @@ function Home() {
           <Divider />
           <VStack w="100%">
             <Search />
-            <Flex flexDirection="row">
-              {categories ? (
-                categories.map((cat) => (
-                  <CategoryComponent key={cat.id} category={cat} />
-                ))
+            <Flex flexDirection="column">
+              {searchStore.ads || searchStore.loading ? (
+                <>
+                  {searchStore.loading ? (
+                    <Spinner />
+                  ) : (
+                    <>
+                      {searchStore.ads!.length === 0 ? (
+                        <p>no such ads were found</p>
+                      ) : (
+                        <>
+                          {searchStore.ads!.map((el) => (
+                            <AdComponent key={el.id} ad={el} />
+                          ))}
+                        </>
+                      )}
+                    </>
+                  )}
+                </>
               ) : (
-                <></>
+                <>
+                  {categories ? (
+                    categories.map((cat) => (
+                      <CategoryComponent key={cat.id} category={cat} />
+                    ))
+                  ) : (
+                    <Spinner />
+                  )}
+                </>
               )}
             </Flex>
           </VStack>
