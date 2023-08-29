@@ -9,6 +9,9 @@ import {
   Button,
   Text,
   Image,
+  Container,
+  Center,
+  Flex,
 } from "@chakra-ui/react";
 import adType from "../types/adType";
 import getUser from "../services/firebase/getUser";
@@ -16,24 +19,37 @@ import userDataType from "../types/userDataType";
 import { useState, useEffect } from "react";
 import UserComponent from "./UserComponent";
 
-function AdComponent({ad} : {ad: adType}) {
-  const [userData, setUserData] = useState<userDataType| null>(null)
-  useEffect(()=>{
-      (async()=>{setUserData(await getUser(ad.userId))})()
-  }, [])  
+function AdComponent({ ad }: { ad: adType }) {
+  const [userData, setUserData] = useState<userDataType | null>(null);
+  useEffect(() => {
+    (async () => {
+      setUserData(await getUser(ad.userId));
+    })();
+  }, []);
   return (
     <Card w="sm">
       <CardBody>
-        <Image src={ad.image} alt={ad.title} borderRadius="md" />
+        <Center>
+          <Image
+            src={ad.image}
+            alt={ad.title}
+            borderRadius="md"
+            w="340px"
+            h="200px"
+          />
+        </Center>
+
         <Stack mt="6" spacing="3">
-          <Heading size="md" as="h3">
-            {ad.title}
-          </Heading>
-          <Text isTruncated>{ad.description}</Text>
-          <Text color="blue.600" fontSize="xl">
-            {ad.price}$
-          </Text>
-          <UserComponent image={userData?.image} name={userData?.name}/>
+          <Flex flexDirection="column" alignContent="center" m={2}>
+            <Heading size="md" as="h3" marginBottom={1}>
+              {ad.title}
+            </Heading>
+            <Text isTruncated my={2}>{ad.description}</Text>
+            <Text color="blue.600" fontSize="2xl" my={2}>
+              {ad.price}$
+            </Text>
+            <UserComponent image={userData?.image} name={userData?.name}/>
+          </Flex>
         </Stack>
       </CardBody>
       <Divider />

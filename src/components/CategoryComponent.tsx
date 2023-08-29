@@ -12,8 +12,8 @@ function CategoryComponent({category}: {category :categoryType}) {
     }, [])  
 
   return (
-    <VStack w="100%">
-      <Heading as="h2">{category.title}</Heading>
+    <VStack w="100%" m={4}>
+      <Heading fontSize="3xl" as="h2" m={2}>{category.title}</Heading>
       <HStack spacing={5}>
         {ads? ads.map((ad)=>(<AdComponent key={ad.id} ad={ad} />)):<></>}
         
