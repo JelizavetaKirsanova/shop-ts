@@ -15,7 +15,7 @@ function CategoryComponent({category}: {category :categoryType}) {
     <VStack w="100%">
       <Heading as="h2">{category.title}</Heading>
       <HStack spacing={5}>
-        {ads? ads.map((ad)=>(<AdComponent ad={ad} />)):<></>}
+        {ads? ads.map((ad)=>(<AdComponent key={ad.id} ad={ad} />)):<></>}
         
       </HStack>
     </VStack>

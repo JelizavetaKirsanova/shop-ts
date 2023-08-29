@@ -11,6 +11,10 @@ import {
   Center,
   Link,
   VStack,
+  Container,
+  Heading,
+  Image,
+  Text
 } from "@chakra-ui/react";
 import * as React from "react";
 import Login from "./Login";
@@ -24,6 +28,9 @@ import getAddsByCategory from "../services/firebase/getAdsByCategory";
 import categoryType from "../types/categoryType";
 import { useEffect } from "react";
 import UploadAd from "./UploadAd";
+import UserComponent from "../components/UserComponent";
+import getAdByTitle from "../services/firebase/getAdByTitle";
+import Search from "../components/Search";
 
 function Home() {
   const [categories, setCategories] = React.useState<categoryType[] | null>(
@@ -34,53 +41,67 @@ function Home() {
       setCategories(await getCategories());
     })();
   }, []);
+
+  console.log(userStore.userData);
+  getAdByTitle("h")
   return (
     <ChakraProvider>
       <Center>
-        <VStack maxW="1000px" w="100%">
-          <Flex w="100%" justifyContent="flex-end">
-            <Spacer />
+        {" "}
+        <VStack maxW="1500px" w="100%">
+  
             {userStore.user ? (
-              <>
-                <UploadAd />
-                <Button
-                  onClick={() => {
-                    getAuth().signOut();
-                  }}
-                  p="4"
-                  m="2"
-                  colorScheme="red"
-                  color="white"
-                >
-                  Logout
-                </Button>
-              </>
+              <Flex w="100%" justifyContent="space-between" alignItems="flex-start">
+                <Center>
+                  <UserComponent image={userStore.userData?.image} name={userStore.userData?.name}/>
+                </Center>
+                <Flex justifyContent="flex-end">
+                  <Spacer />
+                  <UploadAd />
+                  <Button
+                    onClick={() => {
+                      getAuth().signOut();
+                    }}
+                    p="4"
+                    m="2"
+                    colorScheme="red"
+                    color="white"
+                  >
+                    Logout
+                  </Button>
+                  <Box w="82px" m="2">
+                    <Select>
+                      <option value="RUS">RUS</option>
+                      <option value="ENG">ENG</option>
+                      <option value="EST">EST</option>
+                    </Select>
+                  </Box>
+                </Flex>
+              </Flex>
             ) : (
               <>
-                <Login />
-                <Registration />
+                <Flex justifyContent="flex-end">
+                  <Login />
+                  <Registration />
+                  <Box w="82px" m="2">
+                    <Select>
+                      <option value="RUS">RUS</option>
+                      <option value="ENG">ENG</option>
+                      <option value="EST">EST</option>
+                    </Select>
+                  </Box>
+                </Flex>
               </>
             )}
 
-            <Box w="82px" m="2">
-              <Select>
-                <option value="RUS">RUS</option>
-                <option value="ENG">ENG</option>
-                <option value="EST">EST</option>
-              </Select>
-            </Box>
-          </Flex>
 
           <Divider />
           <VStack w="100%">
-            <Center h="100px" color="black">
-              <Input placeholder="Search..." width="350px" />
-              <Button p="4" m="2" colorScheme="green">
-                Find
-              </Button>
-            </Center>
+            <Search />
             {categories ? (
-              categories.map((cat) => <CategoryComponent category={cat} />)
+              categories.map((cat) => (
+                <CategoryComponent key={cat.id} category={cat} />
+              ))
             ) : (
               <></>
             )}

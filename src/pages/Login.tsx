@@ -19,6 +19,9 @@ import {
 import { Formik } from "formik";
 import signIn from "../services/firebase/Login";
 import authCredentialsType from "../types/authCredentialsType";
+import getUser from "../services/firebase/getUser";
+import userStore from "../store/UserStore";
+import { getAuth } from "firebase/auth";
 
 function Login() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -40,10 +43,20 @@ function Login() {
               initialValues={{ email: "", password: "" }}
               onSubmit={async (values) => {
                 const user = await signIn(values as authCredentialsType);
-                onClose();
-                console.log(user);
+                const userData = await getUser(user.uid)
+                if (userData){
+                  userStore.setUserData(userData)
+                  onClose();
+                }else{
+                  getAuth().signOut();
+                }
+
+              
+
+                
               }}
             >
+              
               {({ values, handleChange, handleSubmit, isSubmitting }) => (
                 <form onSubmit={handleSubmit}>
                   <Input

@@ -16,6 +16,8 @@ import { Field, Formik } from "formik";
 import authCredentialsType from "../types/authCredentialsType";
 import signUp from "../services/firebase/Registration";
 import * as Yup from "yup";
+import setUser from "../services/firebase/setUser";
+import userStore from "../store/UserStore";
 
 function Registration() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,11 +36,13 @@ function Registration() {
           <ModalCloseButton />
           <ModalBody>
             <Formik
-              initialValues={{ email: "", password: "" }}
+              initialValues={{ name: "", email: "", password: "", image: "" }}
               validationSchema={Yup.object({
                 email: Yup.string()
                   .email("Invalid email address")
                   .required("Email is required"),
+                name: Yup.string().required("Name is required"),
+                image: Yup.string().required("Image is required"),
                 password: Yup.string()
                   .min(6, "Password must be at least 6 characters")
                   .required("Password is required"),
@@ -46,8 +50,19 @@ function Registration() {
               onSubmit={async (values, { setSubmitting }) => {
                 try {
                   const user = await signUp(values as authCredentialsType);
+
+                console.log(user.uid)
+                  const userData = {
+                    id: user.uid,
+                    name: values.name,
+                    email: values.email,
+                    image: values.image,
+                  };
+
+                  await setUser(userData);
+
+                  userStore.setUserData(userData);
                   onClose();
-                  console.log(user);
                 } catch (error) {
                   console.error(error);
                 } finally {
@@ -73,6 +88,25 @@ function Registration() {
                     value={values.email}
                   />
                   {errors.email && touched.email && <div>{errors.email}</div>}
+                  <Input
+                    m={2}
+                    name="name"
+                    type="text"
+                    placeholder="Name..."
+                    onChange={handleChange}
+                    value={values.name}
+                  />
+                  {errors.name && touched.name && <div>{errors.name}</div>}
+
+                  <Input
+                    m={2}
+                    name="image"
+                    type="text"
+                    placeholder="Image..."
+                    onChange={handleChange}
+                    value={values.image}
+                  />
+                  {errors.image && touched.image && <div>{errors.image}</div>}
 
                   <Input
                     m={2}

@@ -21,6 +21,7 @@ import getCategories from "../services/firebase/getCategories";
 import React, { useEffect } from "react";
 import categoryType from "../types/categoryType";
 import newAd from "../services/firebase/newAd";
+import userStore from "../store/UserStore";
 
 function UploadAd() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,11 +54,14 @@ function UploadAd() {
                 image: "",
                 price: "",
                 category: "",
+                userId: userStore.userData?.id
               }}
               onSubmit={async (values) => {
-                // const ad = await newAd(values as adType);
+                const ad = await newAd(values as adType);
+
                 onClose();
-                 console.log(values);
+                window.location.reload()
+                 console.log(ad);
               }}
             >
               {({ values, handleChange, handleSubmit, isSubmitting }) => (
@@ -90,8 +94,8 @@ function UploadAd() {
                     onChange={handleChange}
                     value={values.price}
                   />
-                  <Select m={2} placeholder= "Select category" onChange={handleChange}>
-                    {categories ? categories.map((cat) => <option value={cat.id}>{cat.title}</option>) : <></>}
+                  <Select m={2} placeholder= "Select category" onChange={handleChange} name="category" value={values.category}>
+                    {categories ? categories.map((cat) => <option key={cat.id} value={cat.id}>{cat.title}</option>) : <></>}
                   </Select>
 
                   <Center>

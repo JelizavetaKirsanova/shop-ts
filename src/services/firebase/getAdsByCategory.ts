@@ -3,7 +3,7 @@ import { db } from "./config";
 import authCredentialsType from "../../types/authCredentialsType";
 import adType from "../../types/adType";
 
-async function getAdsByCategory(categoryId: string ) {
+async function getAdsByCategory(categoryId: string) {
   const q = query(collection(db, "Ads"), where("category", "==", categoryId));
   const querySnapshot = await getDocs(q);
   let ads: adType[] = [];
@@ -14,12 +14,13 @@ async function getAdsByCategory(categoryId: string ) {
       description: doc.data().description,
       price: doc.data().price,
       category: doc.data().category,
-      image: doc.data().image
+      image: doc.data().image,
+      userId: doc.data().userId,
     };
     ads.push(ad);
   });
 
-  console.log(ads)
+  console.log(ads);
 
   return ads;
 }
