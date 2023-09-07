@@ -13,6 +13,7 @@ import {
   Input,
   Center,
   Select,
+  Flex,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
 import signIn from "../services/firebase/Login";
@@ -22,6 +23,8 @@ import React, { useEffect } from "react";
 import categoryType from "../types/categoryType";
 import newAd from "../services/firebase/newAd";
 import userStore from "../store/UserStore";
+import { AddIcon } from "@chakra-ui/icons";
+import googleTranslate from "../services/firebase/translate";
 
 function UploadAd() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,10 +36,12 @@ function UploadAd() {
       setCategories(await getCategories());
     })();
   }, []);
+console.log(userStore.userData)
   return (
     <>
       <Button p="4" m="2" colorScheme="green" onClick={onOpen}>
-        Upload ad
+        <AddIcon m={1} />
+        ad
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -49,36 +54,40 @@ function UploadAd() {
           <ModalBody>
             <Formik
               initialValues={{
-                title: "",
-                description: "",
+                title: { en: "", ee: "", ru: "" },
+                description: { en: "", ee: "", ru: "" },
                 image: "",
                 price: "",
                 category: "",
-                userId: userStore.userData?.id
+                userId: userStore.userData?.id,
               }}
               onSubmit={async (values) => {
+                values.description.ee = await googleTranslate(values.description.en, "et")
+                values.description.ru = await googleTranslate(values.description.en, "ru")
+                values.title.ee = await googleTranslate(values.title.en, "et")
+                values.title.ru = await googleTranslate(values.title.en, "ru")
                 const ad = await newAd(values as adType);
 
                 onClose();
-                window.location.reload()
-                 console.log(ad);
+                window.location.reload();
+                console.log(ad);
               }}
             >
               {({ values, handleChange, handleSubmit, isSubmitting }) => (
                 <form onSubmit={handleSubmit}>
                   <Input
                     m={2}
-                    name="title"
+                    name="title.en"
                     placeholder="Title..."
                     onChange={handleChange}
-                    value={values.title}
+                    value={values.title.en}
                   />
                   <Input
                     m={2}
-                    name="description"
+                    name="description.en"
                     placeholder="Description..."
                     onChange={handleChange}
-                    value={values.description}
+                    value={values.description.en}
                   />
                   <Input
                     m={2}
@@ -94,8 +103,22 @@ function UploadAd() {
                     onChange={handleChange}
                     value={values.price}
                   />
-                  <Select m={2} placeholder= "Select category" onChange={handleChange} name="category" value={values.category}>
-                    {categories ? categories.map((cat) => <option key={cat.id} value={cat.id}>{cat.title}</option>) : <></>}
+                  <Select
+                    m={2}
+                    placeholder="Select category"
+                    onChange={handleChange}
+                    name="category"
+                    value={values.category}
+                  >
+                    {categories ? (
+                      categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.title.en}
+                        </option>
+                      ))
+                    ) : (
+                      <></>
+                    )}
                   </Select>
 
                   <Center>

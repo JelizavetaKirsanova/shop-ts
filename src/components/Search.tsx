@@ -22,11 +22,15 @@ function Search() {
           m="2"
           colorScheme="green"
           onClick={() => {
-            getAdByTitle(value).then((ads) => {
-              searchStore.setAds(ads);
-            });
+            value ? (
+              getAdByTitle(value).then((ads) => {
+                searchStore.setAds(ads);
+              })
+            ) : (
+              <></>
+            );
           }}
-          disabled = {true}
+          disabled={true}
         >
           Find
         </Button>

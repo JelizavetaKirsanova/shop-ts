@@ -1,5 +1,4 @@
-import { makeAutoObservable } from "mobx";
-import userType from "../types/userType";
+import { makeAutoObservable, observable } from "mobx";
 import userDataType from "../types/userDataType";
 import { User } from "firebase/auth";
 
@@ -7,7 +6,10 @@ class UserStore {
   user: User | null = null;
   userData: userDataType | null = null;
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      user: observable.ref,
+      userData: observable.ref,
+    });
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       this.user = JSON.parse(storedUser);
@@ -18,7 +20,7 @@ class UserStore {
     }
   }
 
-  setUser(user: User| null) {
+  setUser(user: User | null) {
     this.user = user;
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
@@ -26,7 +28,7 @@ class UserStore {
       localStorage.removeItem("user");
     }
   }
-  setUserData(userData: userDataType| null) {
+  setUserData(userData: userDataType | null) {
     this.userData = userData;
     if (userData) {
       localStorage.setItem("userData", JSON.stringify(userData));

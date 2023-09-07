@@ -1,4 +1,4 @@
-import { query, collection, addDoc } from "firebase/firestore";
+import {  collection, addDoc } from "firebase/firestore";
 import adType from "../../types/adType";
 import { db } from "./config";
 
@@ -11,6 +11,7 @@ async function newAd({title, description, image, price, category, userId}: adTyp
         category: category,
         userId: userId
     }
+    console.log(ad)
     await addDoc(collection(db, "Ads"), ad);
 }
 export default newAd

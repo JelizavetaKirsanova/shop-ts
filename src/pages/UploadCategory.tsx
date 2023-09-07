@@ -19,13 +19,15 @@ import { Formik } from "formik";
 import React, { useEffect } from "react";
 import categoryType from "../types/categoryType";
 import newCategory from "../services/firebase/newCategory";
+import { AddIcon } from "@chakra-ui/icons";
+import googleTranslate from "../services/firebase/translate";
 
 function UploadCategory() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <Button p="4" m="2" colorScheme="green" onClick={onOpen}>
-        Upload category
+      <AddIcon m={1}/> category
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -38,10 +40,14 @@ function UploadCategory() {
           <ModalBody>
             <Formik
               initialValues={{
-                title: "",
-                description: ""
+                title: { en: "", ee: "", ru: ""},
+                description: { en: "", ee: "", ru: ""}
               }}
               onSubmit={async (values) => {
+                values.description.ee = await googleTranslate(values.description.en, "et")
+                values.description.ru = await googleTranslate(values.description.en, "ru")
+                values.title.ee = await googleTranslate(values.title.en, "et")
+                values.title.ru = await googleTranslate(values.title.en, "ru")
                 const category = await newCategory(values as categoryType);
 
                 onClose();
@@ -53,17 +59,17 @@ function UploadCategory() {
                 <form onSubmit={handleSubmit}>
                   <Input
                     m={2}
-                    name="title"
+                    name="title.en"
                     placeholder="Title..."
                     onChange={handleChange}
-                    value={values.title}
+                    value={values.title.en}
                   />
                   <Input
                     m={2}
-                    name="description"
+                    name="description.en"
                     placeholder="Description..."
                     onChange={handleChange}
-                    value={values.description}
+                    value={values.description.en}
                   />
                   <Center>
                     <Button m={2} type="submit" disabled={isSubmitting}>
