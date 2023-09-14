@@ -25,6 +25,7 @@ import newAd from "../services/firebase/newAd";
 import userStore from "../store/UserStore";
 import { AddIcon } from "@chakra-ui/icons";
 import googleTranslate from "../services/firebase/translate";
+import UploadPhoto from "./UploadPhoto";
 
 function UploadAd() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -52,6 +53,7 @@ console.log(userStore.userData)
           </Center>
           <ModalCloseButton />
           <ModalBody>
+            <UploadPhoto/>
             <Formik
               initialValues={{
                 title: { en: "", ee: "", ru: "" },
@@ -75,6 +77,7 @@ console.log(userStore.userData)
             >
               {({ values, handleChange, handleSubmit, isSubmitting }) => (
                 <form onSubmit={handleSubmit}>
+
                   <Input
                     m={2}
                     name="title.en"

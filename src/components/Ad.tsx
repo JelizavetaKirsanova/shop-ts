@@ -46,7 +46,7 @@ function AdComponent({ ad }: { ad: adType }) {
             <Heading size="md" as="h3" marginBottom={1}>
               {ad.title[languageStore.current]}
             </Heading>
-            <Text isTruncated my={2}>{ad.description.en}</Text>
+            <Text isTruncated my={2}>{ad.description[languageStore.current]}</Text>
             <Text color="blue.600" fontSize="2xl" my={2}>
               {ad.price}$
             </Text>

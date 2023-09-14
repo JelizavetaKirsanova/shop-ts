@@ -65,6 +65,7 @@ import googleTranslate from "../services/firebase/translate";
 import translate from "../services/firebase/translate";
 import getAllAds from "../services/firebase/getAllAds";
 import SelectComponent from "../components/SelectComponent";
+import languageStore from "../store/LanguageStore";
 
 function Home() {
   const [categories, setCategories] = React.useState<categoryType[] | null>(
@@ -75,7 +76,7 @@ function Home() {
       setCategories(await getCategories());
     })();
   }, []);
-  
+
   console.log(userStore.userData);
 
   getAdByTitle("h");
@@ -102,7 +103,7 @@ function Home() {
             >
               <Center m={2}>
                 <Box w="82px" m="2">
-                  <SelectComponent/>
+                  <SelectComponent />
                 </Box>
               </Center>
 
@@ -205,12 +206,18 @@ function Home() {
               <>
                 <Tabs isFitted variant="unstyled" colorScheme="green">
                   <TabList>
-                    <Tab>All</Tab>
+                    {languageStore.current == "en" ? (
+                      <Tab>All</Tab>
+                    ) : languageStore.current == "ru" ? (
+                      <Tab>Все</Tab>
+                    ) : (
+                      <Tab>Kõik</Tab>
+                    )}
 
                     {categories ? (
                       <>
                         {categories.map((cat) => (
-                          <Tab>{cat.title.en}</Tab>
+                          <Tab>{cat.title[languageStore.current]}</Tab>
                         ))}
                       </>
                     ) : (
