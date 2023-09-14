@@ -14,30 +14,35 @@ import {
   Center,
   Select,
   Flex,
+  Progress,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
 import signIn from "../services/firebase/Login";
 import adType from "../types/adType";
 import getCategories from "../services/firebase/getCategories";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import categoryType from "../types/categoryType";
 import newAd from "../services/firebase/newAd";
 import userStore from "../store/UserStore";
 import { AddIcon } from "@chakra-ui/icons";
 import googleTranslate from "../services/firebase/translate";
 import UploadPhoto from "./UploadPhoto";
+import uploadFile from "../services/firebase/uploadFile";
+import { getDownloadURL } from "firebase/storage";
 
 function UploadAd() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [categories, setCategories] = React.useState<categoryType[] | null>(
-    null
-  );
+  const [categories, setCategories] = useState<categoryType[] | null>(null);
+  const [file, setFile] = useState<FileList | null>();
+  const [percent, setPercent] = useState(0);
+
+  const handleSubmit = async () => {};
   useEffect(() => {
     (async () => {
       setCategories(await getCategories());
     })();
   }, []);
-console.log(userStore.userData)
+  console.log(userStore.userData);
   return (
     <>
       <Button p="4" m="2" colorScheme="green" onClick={onOpen}>
@@ -53,7 +58,6 @@ console.log(userStore.userData)
           </Center>
           <ModalCloseButton />
           <ModalBody>
-            <UploadPhoto/>
             <Formik
               initialValues={{
                 title: { en: "", ee: "", ru: "" },
@@ -64,20 +68,49 @@ console.log(userStore.userData)
                 userId: userStore.userData?.id,
               }}
               onSubmit={async (values) => {
-                values.description.ee = await googleTranslate(values.description.en, "et")
-                values.description.ru = await googleTranslate(values.description.en, "ru")
-                values.title.ee = await googleTranslate(values.title.en, "et")
-                values.title.ru = await googleTranslate(values.title.en, "ru")
-                const ad = await newAd(values as adType);
+                values.description.ee = await googleTranslate(
+                  values.description.en,
+                  "et"
+                );
+                values.description.ru = await googleTranslate(
+                  values.description.en,
+                  "ru"
+                );
+                values.title.ee = await googleTranslate(values.title.en, "et");
+                values.title.ru = await googleTranslate(values.title.en, "ru");
+                if (!file) {
+                  alert("no file");
+                  return;
+                }
+                const image = file[0];
 
-                onClose();
-                window.location.reload();
-                console.log(ad);
+                const uploadTask = uploadFile(image);
+                uploadTask.on(
+                  "state_changed",
+                  (snapshot) => {
+                    const percent = Math.round(
+                      (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                    setPercent(percent);
+                  },
+                  (err) => console.log(err),
+                  () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(
+                      async (url) => {
+                        values.image = url
+                        const ad = await newAd(values as adType);
+
+                        onClose();
+                        window.location.reload();
+                        console.log(ad);
+                      }
+                    );
+                  }
+                );
               }}
             >
               {({ values, handleChange, handleSubmit, isSubmitting }) => (
                 <form onSubmit={handleSubmit}>
-
                   <Input
                     m={2}
                     name="title.en"
@@ -93,12 +126,12 @@ console.log(userStore.userData)
                     value={values.description.en}
                   />
                   <Input
-                    m={2}
-                    name="image"
-                    placeholder="Image..."
-                    onChange={handleChange}
-                    value={values.image}
+                    onChange={(event) => {
+                      setFile(event.target.files);
+                    }}
+                    type="file"
                   />
+                  {percent > 0 && <Progress value={percent} />}
                   <Input
                     m={2}
                     name="price"
