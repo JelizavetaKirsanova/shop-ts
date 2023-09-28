@@ -57,7 +57,14 @@ function AdComponent({ ad }: { ad: adType }) {
       <Divider />
       <CardFooter>
         <Button variant="solid" colorScheme="green">
-          Buy now
+          
+          {languageStore.current == "en" ? (
+                      <p> Buy now</p>
+                    ) : languageStore.current == "ru" ? (
+                      <p> Купить</p>
+                    ) : (
+                      <p> Osta</p>
+                    )}
         </Button>
       </CardFooter>
     </Card>

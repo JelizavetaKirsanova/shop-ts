@@ -2,6 +2,7 @@ import { Center, Input, Button } from "@chakra-ui/react";
 import { useState } from "react";
 import getAdByTitle from "../services/firebase/getAdByTitle";
 import searchStore from "../store/SearchStore";
+import languageStore from "../store/LanguageStore";
 
 function Search() {
   const [value, setValue] = useState("");
@@ -11,7 +12,7 @@ function Search() {
       <Center h="100px" color="black">
         <Input
           placeholder="Search..."
-          width="350px"
+          width="370px"
           value={value}
           onChange={(event) => {
             setValue(event.target.value);
@@ -32,7 +33,13 @@ function Search() {
           }}
           disabled={true}
         >
-          Find
+          {languageStore.current == "en" ? (
+                      <p>Find</p>
+                    ) : languageStore.current == "ru" ? (
+                      <p>Поиск</p>
+                    ) : (
+                      <p> Otsing</p>
+                    )}
         </Button>
       </Center>
     </>

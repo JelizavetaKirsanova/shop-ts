@@ -29,6 +29,7 @@ import googleTranslate from "../services/firebase/translate";
 import UploadPhoto from "./UploadPhoto";
 import uploadFile from "../services/firebase/uploadFile";
 import { getDownloadURL } from "firebase/storage";
+import languageStore from "../store/LanguageStore";
 
 function UploadAd() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -47,7 +48,14 @@ function UploadAd() {
     <>
       <Button p="4" m="2" colorScheme="green" onClick={onOpen}>
         <AddIcon m={1} />
-        ad
+
+        {languageStore.current == "en" ? (
+                      <p> ad</p>
+                    ) : languageStore.current == "ru" ? (
+                      <p> продукт</p>
+                    ) : (
+                      <p> toode</p>
+                    )}
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

@@ -21,13 +21,20 @@ import categoryType from "../types/categoryType";
 import newCategory from "../services/firebase/newCategory";
 import { AddIcon } from "@chakra-ui/icons";
 import googleTranslate from "../services/firebase/translate";
+import languageStore from "../store/LanguageStore";
 
 function UploadCategory() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <Button p="4" m="2" colorScheme="green" onClick={onOpen}>
-      <AddIcon m={1}/> category
+      <AddIcon m={1}/> {languageStore.current == "en" ? (
+                      <p> category</p>
+                    ) : languageStore.current == "ru" ? (
+                      <p> категория</p>
+                    ) : (
+                      <p> kategooria</p>
+                    )}
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
